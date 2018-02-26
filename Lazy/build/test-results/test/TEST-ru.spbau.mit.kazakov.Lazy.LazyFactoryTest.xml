@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.spbau.mit.kazakov.Lazy.LazyFactoryTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2018-02-26T21:37:45" hostname="Debian" time="0.001">
+  <properties/>
+  <testcase name="createMultiThreadLazy" classname="ru.spbau.mit.kazakov.Lazy.LazyFactoryTest" time="0.001"/>
+  <testcase name="a" classname="ru.spbau.mit.kazakov.Lazy.LazyFactoryTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
