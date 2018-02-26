@@ -1,2 +1,4 @@
 language: java
+notifications:
+  email: false
 script: for directory in */; do cd "${directory}" && ./gradlew check && cd ..; done
