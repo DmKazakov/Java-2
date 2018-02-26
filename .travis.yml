@@ -1,0 +1,2 @@
+language: java
+for directory in */; do cd "${directory}" && ./gradlew check && cd ..; done
