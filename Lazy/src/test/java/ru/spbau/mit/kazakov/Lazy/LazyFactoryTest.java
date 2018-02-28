@@ -38,6 +38,12 @@ public class LazyFactoryTest {
     }
 
     @Test
+    public void testSingleThreadNullResult() {
+        Lazy<Integer> singleThreadLazy = LazyFactory.createSingleThreadLazy(() -> null);
+        assertNull(singleThreadLazy.get());
+    }
+
+    @Test
     public void testMultiThreadConstructor() {
         LazyFactory.createMultiThreadLazy(() -> 5);
     }
@@ -50,7 +56,7 @@ public class LazyFactoryTest {
         for (int i = 0; i < 100; i++) {
             threads.add(new Thread(getLazy));
         }
-        for(Thread thread : threads) {
+        for (Thread thread : threads) {
             thread.start();
         }
     }
@@ -64,7 +70,7 @@ public class LazyFactoryTest {
         for (int i = 0; i < 100; i++) {
             threads.add(new Thread(getLazy));
         }
-        for(Thread thread : threads) {
+        for (Thread thread : threads) {
             thread.start();
         }
     }
@@ -79,7 +85,20 @@ public class LazyFactoryTest {
         for (int i = 0; i < 100; i++) {
             threads.add(new Thread(getLazy));
         }
-        for(Thread thread : threads) {
+        for (Thread thread : threads) {
+            thread.start();
+        }
+    }
+
+    @Test
+    public void testMultiThreadNullResult() {
+        Lazy<Integer> multiThreadLazy = LazyFactory.createSingleThreadLazy(() -> null);
+        Runnable getLazy = () -> assertNull(multiThreadLazy.get());
+        List<Thread> threads = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            threads.add(new Thread(getLazy));
+        }
+        for (Thread thread : threads) {
             thread.start();
         }
     }
