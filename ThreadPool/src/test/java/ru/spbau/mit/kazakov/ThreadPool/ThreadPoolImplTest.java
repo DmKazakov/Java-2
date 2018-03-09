@@ -143,7 +143,7 @@ public class ThreadPoolImplTest {
 
     private void safeSleep() {
         try {
-            TimeUnit.SECONDS.sleep(1L);
+            TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException var2) {
             throw new RuntimeException();
         }
