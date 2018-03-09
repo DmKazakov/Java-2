@@ -70,11 +70,19 @@ public class ThreadPoolImpl {
     }
 
     /**
-     * Sends terminating signals to all threads.
+     * Dismisses all task in queue, waits for tasks which are computing and terminates all threads.
      */
-    public void shutdown() {
+    public void shutdown() throws InterruptedException {
         for (Thread thread : threads) {
             thread.interrupt();
+        }
+        synchronized (tasksQueue) {
+            while (!tasksQueue.isEmpty()) {
+                tasksQueue.remove().isSuccessful = false;
+            }
+        }
+        for (Thread thread : threads) {
+            thread.join();
         }
     }
 

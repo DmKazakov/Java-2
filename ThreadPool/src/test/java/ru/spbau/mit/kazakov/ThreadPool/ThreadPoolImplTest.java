@@ -10,11 +10,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class ThreadPoolImplTest {
-    public ThreadPoolImplTest() {
-    }
-
     @Test
-    public void testConstructorAndShutdown() {
+    public void testConstructorAndShutdown() throws InterruptedException {
         ThreadPoolImpl threadPool = new ThreadPoolImpl(20);
         threadPool.shutdown();
     }
