@@ -66,7 +66,7 @@ public class TicTacToe extends Application {
         AILevelComboBox.getItems().addAll("Medium", "Easy");
         AILevelComboBox.setValue("Medium");
 
-        Button singlePlayerButton = new Button("Single player");
+        Button singlePlayerButton = new Button("SinglePlayer");
         singlePlayerButton.setFocusTraversable(false);
         singlePlayerButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         singlePlayerButton.setOnAction(value -> {
@@ -87,7 +87,7 @@ public class TicTacToe extends Application {
         HBox.setHgrow(singlePlayerButton, Priority.ALWAYS);
         singlePlayerMenu.getChildren().addAll(singlePlayerButton, AILevelComboBox);
 
-        Button multiPlayerButton = new Button("Multi player");
+        Button multiPlayerButton = new Button("MultiPlayer");
         multiPlayerButton.setFocusTraversable(false);
         multiPlayerButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         multiPlayerButton.setOnAction(value -> {
