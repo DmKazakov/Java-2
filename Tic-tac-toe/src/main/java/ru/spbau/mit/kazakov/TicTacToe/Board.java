@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 public interface Board {
     /**
      * Makes specified turn on the board and updates state of game.
+     *
      * @param row of turn
      * @param col of turn
      * @return new state of board
@@ -17,4 +18,9 @@ public interface Board {
      */
     @NotNull
     State getState();
+
+    /**
+     * Sets board to starting state.
+     */
+    String[][] reset();
 }

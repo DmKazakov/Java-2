@@ -2,6 +2,9 @@ package ru.spbau.mit.kazakov.TicTacToe;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Implements logic of game for two players.
+ */
 public class HotSeatBoard extends AbstractBoard {
     /**
      * @see AbstractBoard#AbstractBoard(int)
