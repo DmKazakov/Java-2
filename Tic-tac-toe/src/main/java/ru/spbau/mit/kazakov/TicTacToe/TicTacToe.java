@@ -256,6 +256,7 @@ public class TicTacToe extends Application {
 
     /**
      * Reflects specified state of the board for player.
+     *
      * @param boardState specified state of the board
      */
     private void updateBoardScene(String[][] boardState) {
