@@ -15,7 +15,7 @@ public class AbstractBoardTest {
     public void testGetStateRunning() {
         AbstractBoard board = new HotSeatBoard(3);
         board.move(1, 1);
-        String[][] boardState = board.move(2, 0);
+        board.move(2, 0);
         assertEquals(State.RUNNING, board.getState());
     }
 

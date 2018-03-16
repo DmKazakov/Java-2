@@ -247,9 +247,9 @@ public class TicTacToe extends Application {
      * Prevents all new turns.
      */
     private void disableBoard() {
-        for (int i = 0; i < cells.length; i++) {
+        for (Button[] cell : cells) {
             for (int j = 0; j < cells.length; j++) {
-                cells[i][j].setDisable(true);
+                cell[j].setDisable(true);
             }
         }
     }
