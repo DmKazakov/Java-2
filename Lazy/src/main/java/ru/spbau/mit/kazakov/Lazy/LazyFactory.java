@@ -71,7 +71,7 @@ public class LazyFactory {
      * @param <T> type of evaluated value
      */
     private static class MultiThreadLazy<T> implements Lazy<T> {
-        private Supplier<T> supplier;
+        private volatile Supplier<T> supplier;
         private T supplied;
 
         /**

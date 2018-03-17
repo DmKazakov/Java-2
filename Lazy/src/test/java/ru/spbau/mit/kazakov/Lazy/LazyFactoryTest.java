@@ -49,7 +49,7 @@ public class LazyFactoryTest {
     }
 
     @Test
-    public void testMultiThreadGet() {
+    public void testMultiThreadGet() throws InterruptedException {
         Lazy<String> multiThreadLazy = LazyFactory.createMultiThreadLazy(() -> ":" + "c");
         Runnable getLazy = () -> assertEquals(":c", multiThreadLazy.get());
         List<Thread> threads = new ArrayList<>();
@@ -59,10 +59,13 @@ public class LazyFactoryTest {
         for (Thread thread : threads) {
             thread.start();
         }
+        for (Thread thread : threads) {
+            thread.join();
+        }
     }
 
     @Test
-    public void testMultiThreadEvaluateOnce() {
+    public void testMultiThreadEvaluateOnce() throws InterruptedException {
         Lazy<Object> multiThreadLazy = LazyFactory.createMultiThreadLazy(Object::new);
         Object firstEvaluation = multiThreadLazy.get();
         Runnable getLazy = () -> assertEquals(firstEvaluation, multiThreadLazy.get());
@@ -73,10 +76,13 @@ public class LazyFactoryTest {
         for (Thread thread : threads) {
             thread.start();
         }
+        for (Thread thread : threads) {
+            thread.join();
+        }
     }
 
     @Test
-    public void testMultiThreadLazy() {
+    public void testMultiThreadLazy() throws InterruptedException {
         List<Integer> list = Arrays.asList(56);
         Lazy<Integer> multiThreadLazy = LazyFactory.createMultiThreadLazy(() -> list.get(0));
         list.set(0, 11);
@@ -88,10 +94,13 @@ public class LazyFactoryTest {
         for (Thread thread : threads) {
             thread.start();
         }
+        for (Thread thread : threads) {
+            thread.join();
+        }
     }
 
     @Test
-    public void testMultiThreadNullResult() {
+    public void testMultiThreadNullResult() throws InterruptedException {
         Lazy<Integer> multiThreadLazy = LazyFactory.createSingleThreadLazy(() -> null);
         Runnable getLazy = () -> assertNull(multiThreadLazy.get());
         List<Thread> threads = new ArrayList<>();
@@ -100,6 +109,9 @@ public class LazyFactoryTest {
         }
         for (Thread thread : threads) {
             thread.start();
+        }
+        for (Thread thread : threads) {
+            thread.join();
         }
     }
 }
