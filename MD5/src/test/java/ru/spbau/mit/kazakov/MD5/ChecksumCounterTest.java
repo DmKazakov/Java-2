@@ -1,6 +1,6 @@
 package ru.spbau.mit.kazakov.MD5;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

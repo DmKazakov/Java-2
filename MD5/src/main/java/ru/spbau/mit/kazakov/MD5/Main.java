@@ -1,6 +1,7 @@
 package ru.spbau.mit.kazakov.MD5;
 
-import com.sun.istack.internal.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Console application for counting checksum.

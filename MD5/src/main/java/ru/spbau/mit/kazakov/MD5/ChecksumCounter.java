@@ -1,6 +1,6 @@
 package ru.spbau.mit.kazakov.MD5;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
