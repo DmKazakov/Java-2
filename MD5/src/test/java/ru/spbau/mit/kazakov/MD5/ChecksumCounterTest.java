@@ -93,7 +93,7 @@ public class ChecksumCounterTest {
 
         ChecksumCounter checksumCounter = new ChecksumCounter(2048, HashAlgorithm.MD5);
 
-        assertEquals(countFileChecksum(folderPath), checksumCounter.getHash(folderPath.toString()));
+        assertEquals(countOneDepthFolderChecksum(folderPath), checksumCounter.getHash(folderPath.toString()));
     }
 
     @Test
@@ -106,7 +106,7 @@ public class ChecksumCounterTest {
 
         ChecksumCounter checksumCounter = new ChecksumCounter(2048, HashAlgorithm.MD5, 2);
 
-        assertEquals(countFileChecksum(folderPath), checksumCounter.getHash(folderPath.toString()));
+        assertEquals(countOneDepthFolderChecksum(folderPath), checksumCounter.getHash(folderPath.toString()));
     }
 
     @Test
@@ -162,7 +162,7 @@ public class ChecksumCounterTest {
         for(Path filePath : Files.list(path).collect(Collectors.toList())) {
             byte[] buffer = new byte[2048];
 
-            try (InputStream inputStream = Files.newInputStream(path);
+            try (InputStream inputStream = Files.newInputStream(filePath);
                  DigestInputStream digestInputStream = new DigestInputStream(inputStream, messageDigest)
             ) {
                 //noinspection StatementWithEmptyBody
