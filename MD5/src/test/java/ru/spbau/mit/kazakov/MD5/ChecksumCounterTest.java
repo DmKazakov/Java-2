@@ -84,32 +84,6 @@ public class ChecksumCounterTest {
     }
 
     @Test
-    public void testGetHashDirectorySingleThread() throws Exception {
-        Path folderPath = Paths.get(testingPath.toString(), "not_empty");
-        Files.createDirectory(folderPath);
-        Path path = Paths.get(folderPath.toString(), "not_empty_file");
-        Files.createFile(path);
-        Files.write(path, "Not empty".getBytes());
-
-        ChecksumCounter checksumCounter = new ChecksumCounter(2048, HashAlgorithm.MD5);
-
-        assertEquals(countOneDepthFolderChecksum(folderPath), checksumCounter.getHash(folderPath.toString()));
-    }
-
-    @Test
-    public void testGetHashDirectoryMultiThread() throws Exception {
-        Path folderPath = Paths.get(testingPath.toString(), "not_empty");
-        Files.createDirectory(folderPath);
-        Path path = Paths.get(folderPath.toString(), "not_empty_file");
-        Files.createFile(path);
-        Files.write(path, "Not empty".getBytes());
-
-        ChecksumCounter checksumCounter = new ChecksumCounter(2048, HashAlgorithm.MD5, 2);
-
-        assertEquals(countOneDepthFolderChecksum(folderPath), checksumCounter.getHash(folderPath.toString()));
-    }
-
-    @Test
     public void testGetHashEmptyDirectorySingleThread() throws Exception {
         Path folderPath = Paths.get(testingPath.toString(), "empty");
         Files.createDirectory(folderPath);
