@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Implements logic of game with AI.
  */
 public class AIBoard extends AbstractBoard {
-    private AI AI;
+    private final AI ai;
 
     /**
      * Calls parent's constructor and initializes AI.
@@ -20,11 +20,13 @@ public class AIBoard extends AbstractBoard {
         super(size);
         switch (level) {
             case EASY:
-                AI = new EasyAI();
+                ai = new EasyAI();
                 break;
             case MEDIUM:
-                AI = new MediumAI();
+                ai = new MediumAI();
                 break;
+            default:
+                throw new IllegalArgumentException();
         }
     }
 
@@ -33,14 +35,14 @@ public class AIBoard extends AbstractBoard {
      */
     @NotNull
     @Override
-    public String[][] move(int row, int col) {
-        board[row][col] = player.toString();
+    public CellContent[][] move(int row, int col) {
+        board[row][col] = player.toCellContent();
         updateState(row, col);
         if (state != State.RUNNING) {
             return board;
         }
         player = player.next();
-        AI.makeTurn();
+        ai.makeTurn();
         player = player.next();
         return board;
     }
@@ -55,9 +57,9 @@ public class AIBoard extends AbstractBoard {
         @Override
         public void makeTurn() {
             int freeCellsNumber = 0;
-            for (String[] row : board) {
-                for (String cell : row) {
-                    if (cell.equals(" ")) {
+            for (CellContent[] row : board) {
+                for (CellContent cell : row) {
+                    if (cell.equals(CellContent.EMPTY)) {
                         freeCellsNumber++;
                     }
                 }
@@ -65,8 +67,8 @@ public class AIBoard extends AbstractBoard {
             int turn = ThreadLocalRandom.current().nextInt(0, freeCellsNumber);
             for (int i = 0; i < board.length; i++) {
                 for (int j = 0; j < board.length; j++) {
-                    if (board[i][j].equals(" ") && turn-- == 0) {
-                        board[i][j] = player.toString();
+                    if (board[i][j].equals(CellContent.EMPTY) && turn-- == 0) {
+                        board[i][j] = player.toCellContent();
                         updateState(i, j);
                         return;
                     }
@@ -85,7 +87,7 @@ public class AIBoard extends AbstractBoard {
          * @param turns specified line from the board
          */
         private boolean canLose(String turns) {
-            return turns.matches(player.next().toString() + "*" + " " + player.next().toString() + "*");
+            return turns.matches(player.next().toCellContent() + "*" + CellContent.EMPTY + player.next().toCellContent() + "*");
         }
 
         /**
@@ -94,7 +96,7 @@ public class AIBoard extends AbstractBoard {
          * @param turns specified line from the board
          */
         private boolean canWin(String turns) {
-            return turns.matches(player.toString() + "*" + " " + player.toString() + "*");
+            return turns.matches(player.toCellContent() + "*" + CellContent.EMPTY + player.toCellContent() + "*");
         }
 
         /**
@@ -110,21 +112,21 @@ public class AIBoard extends AbstractBoard {
                 int rowFreeCell = 0, colFreeCell = 0;
                 StringBuilder col = new StringBuilder();
                 for (int j = 0; j < board.length; j++) {
-                    if (board[i][j].equals(" ")) {
+                    if (board[i][j].equals(CellContent.EMPTY)) {
                         rowFreeCell = j;
                     }
                     row.append(board[i][j]);
-                    if (board[j][i].equals(" ")) {
+                    if (board[j][i].equals(CellContent.EMPTY)) {
                         colFreeCell = j;
                     }
                     col.append(board[j][i]);
                 }
                 if (canWin(row.toString())) {
-                    board[i][rowFreeCell] = player.toString();
+                    board[i][rowFreeCell] = player.toCellContent();
                     updateState(i, rowFreeCell);
                     return;
                 } else if (canWin(col.toString())) {
-                    board[colFreeCell][i] = player.toString();
+                    board[colFreeCell][i] = player.toCellContent();
                     updateState(colFreeCell, i);
                     return;
                 } else if (canLose(row.toString())) {
@@ -140,21 +142,21 @@ public class AIBoard extends AbstractBoard {
             StringBuilder firstDiagonal = new StringBuilder();
             StringBuilder secondDiagonal = new StringBuilder();
             for (int i = 0; i < board.length; i++) {
-                if (board[i][i].equals(" ")) {
+                if (board[i][i].equals(CellContent.EMPTY)) {
                     firstDiagonalFreeCell = i;
                 }
-                if (board[i][board.length - 1 - i].equals(" ")) {
+                if (board[i][board.length - 1 - i].equals(CellContent.EMPTY)) {
                     secondDiagonalFreeCell = i;
                 }
                 firstDiagonal.append(board[i][i]);
                 secondDiagonal.append(board[i][board.length - 1 - i]);
             }
             if (canWin(firstDiagonal.toString())) {
-                board[firstDiagonalFreeCell][firstDiagonalFreeCell] = player.toString();
+                board[firstDiagonalFreeCell][firstDiagonalFreeCell] = player.toCellContent();
                 updateState(firstDiagonalFreeCell, firstDiagonalFreeCell);
                 return;
             } else if (canWin(secondDiagonal.toString())) {
-                board[secondDiagonalFreeCell][board.length - 1 - secondDiagonalFreeCell] = player.toString();
+                board[secondDiagonalFreeCell][board.length - 1 - secondDiagonalFreeCell] = player.toCellContent();
                 updateState(secondDiagonalFreeCell, board.length - 1 - secondDiagonalFreeCell);
                 return;
             } else if (canLose(firstDiagonal.toString())) {
@@ -166,7 +168,7 @@ public class AIBoard extends AbstractBoard {
             }
 
             if (defendCol != -1) {
-                board[defendRow][defendCol] = player.toString();
+                board[defendRow][defendCol] = player.toCellContent();
                 updateState(defendRow, defendCol);
                 return;
             }

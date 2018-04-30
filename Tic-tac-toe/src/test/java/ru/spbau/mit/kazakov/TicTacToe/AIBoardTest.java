@@ -29,179 +29,169 @@ public class AIBoardTest {
     @Test
     public void testMakeTurnEasyAI() {
         Board board = new AIBoard(3, AILevel.EASY);
-        String[][] boardState = board.move(2, 1);
-        int diff = 0;
-        for (int i = 0; i < boardState.length; i++) {
-            for (int j = 0; j < boardState.length; j++) {
-                if (!boardState[i][j].equals(" ") && !(i == 2 && j == 1)) {
-                    assertEquals(Player.O.toString(), boardState[i][j]);
-                    diff++;
-                }
-            }
-        }
-        assertEquals(1, diff);
-        assertEquals(Player.X.toString(), boardState[2][1]);
+        CellContent[][] boardState = board.move(2, 1);
+        checkEnemyFirstTurn(boardState);
+        assertEquals(CellContent.X, boardState[2][1]);
     }
 
     @Test
     public void testMakeTurnMediumAISimple() {
         Board board = new AIBoard(3, AILevel.EASY);
-        String[][] boardState = board.move(2, 1);
+        CellContent[][] boardState = board.move(2, 1);
+        checkEnemyFirstTurn(boardState);
+        assertEquals(CellContent.X, boardState[2][1]);
+    }
+
+    @Test
+    public void testMakeTurnMediumAIPreventHorizontalLose() throws IllegalAccessException {
+        CellContent[][] startingState = new CellContent[][]{{CellContent.X, CellContent.EMPTY, CellContent.EMPTY},
+                {CellContent.O, CellContent.EMPTY, CellContent.EMPTY},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY}};
+        CellContent[][] expectedState = new CellContent[][]{{CellContent.X, CellContent.X, CellContent.O},
+                {CellContent.O, CellContent.EMPTY, CellContent.EMPTY},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY}};
+        checkStateAfterPlayerTurn(startingState, expectedState, 0, 1);
+    }
+
+    @Test
+    public void testMakeTurnMediumAIPreventVerticalLose() throws IllegalAccessException {
+        CellContent[][] startingState = new CellContent[][]{{CellContent.X, CellContent.EMPTY, CellContent.O},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY}};
+        CellContent[][] expectedState = new CellContent[][]{{CellContent.X, CellContent.EMPTY, CellContent.O},
+                {CellContent.X, CellContent.EMPTY, CellContent.EMPTY},
+                {CellContent.O, CellContent.EMPTY, CellContent.EMPTY}};
+        checkStateAfterPlayerTurn(startingState, expectedState, 1, 0);
+    }
+
+    @Test
+    public void testMakeTurnMediumAIPreventFirstDiagonalLose() throws IllegalAccessException {
+        CellContent[][] startingState = new CellContent[][]{{CellContent.X, CellContent.EMPTY, CellContent.O},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY}};
+        CellContent[][] expectedState = new CellContent[][]{{CellContent.X, CellContent.EMPTY, CellContent.O},
+                {CellContent.EMPTY, CellContent.X, CellContent.EMPTY},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.O}};
+        checkStateAfterPlayerTurn(startingState, expectedState, 1, 1);
+    }
+
+    @Test
+    public void testMakeTurnMediumAIPreventSecondDiagonalLose() throws IllegalAccessException {
+        CellContent[][] startingState = new CellContent[][]{{CellContent.O, CellContent.EMPTY, CellContent.X},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY}};
+        CellContent[][] expectedState = new CellContent[][]{{CellContent.O, CellContent.EMPTY, CellContent.X},
+                {CellContent.EMPTY, CellContent.X, CellContent.EMPTY},
+                {CellContent.O, CellContent.EMPTY, CellContent.EMPTY}};
+        checkStateAfterPlayerTurn(startingState, expectedState, 1, 1);
+    }
+
+    @Test
+    public void testMakeTurnMediumAIHorizontalWin() throws IllegalAccessException {
+        CellContent[][] startingState = new CellContent[][]{{CellContent.O, CellContent.EMPTY, CellContent.O},
+                {CellContent.X, CellContent.EMPTY, CellContent.EMPTY},
+                {CellContent.X, CellContent.EMPTY, CellContent.EMPTY}};
+        CellContent[][] expectedState = new CellContent[][]{{CellContent.O, CellContent.O, CellContent.O},
+                {CellContent.X, CellContent.X, CellContent.EMPTY},
+                {CellContent.X, CellContent.EMPTY, CellContent.EMPTY}};
+        checkStateAfterPlayerTurn(startingState, expectedState, 1, 1);
+    }
+
+    @Test
+    public void testMakeTurnMediumAIVerticalWin() throws IllegalAccessException {
+        CellContent[][] startingState = new CellContent[][]{{CellContent.O, CellContent.X, CellContent.X},
+                {CellContent.O, CellContent.EMPTY, CellContent.EMPTY},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY}};
+        CellContent[][] expectedState = new CellContent[][]{{CellContent.O, CellContent.X, CellContent.X},
+                {CellContent.O, CellContent.X, CellContent.EMPTY},
+                {CellContent.O, CellContent.EMPTY, CellContent.EMPTY}};
+        checkStateAfterPlayerTurn(startingState, expectedState, 1, 1);
+    }
+
+    @Test
+    public void testMakeTurnMediumAIFirstDiagonalWin() throws IllegalAccessException {
+        CellContent[][] startingState = new CellContent[][]{{CellContent.O, CellContent.X, CellContent.X},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.O}};
+        CellContent[][] expectedState = new CellContent[][]{{CellContent.O, CellContent.X, CellContent.X},
+                {CellContent.EMPTY, CellContent.O, CellContent.EMPTY},
+                {CellContent.X, CellContent.EMPTY, CellContent.O}};
+        checkStateAfterPlayerTurn(startingState, expectedState, 2, 0);
+    }
+
+    @Test
+    public void testMakeTurnMediumAISecondDiagonalWin() throws IllegalAccessException {
+        CellContent[][] startingState = new CellContent[][]{{CellContent.X, CellContent.X, CellContent.O},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY},
+                {CellContent.O, CellContent.EMPTY, CellContent.EMPTY}};
+        CellContent[][] expectedState = new CellContent[][]{{CellContent.X, CellContent.X, CellContent.O},
+                {CellContent.X, CellContent.O, CellContent.EMPTY},
+                {CellContent.O, CellContent.EMPTY, CellContent.EMPTY}};
+        checkStateAfterPlayerTurn(startingState, expectedState, 1, 0);
+    }
+
+    @Test
+    public void testMakeTurnPlayerHorizontalWin() throws IllegalAccessException {
+        CellContent[][] startingState = new CellContent[][]{{CellContent.X, CellContent.EMPTY, CellContent.X},
+                {CellContent.O, CellContent.EMPTY, CellContent.O},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY}};
+        CellContent[][] expectedState = new CellContent[][]{{CellContent.X, CellContent.X, CellContent.X},
+                {CellContent.O, CellContent.EMPTY, CellContent.O},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY}};
+        checkStateAfterPlayerTurn(startingState, expectedState, 0, 1);
+    }
+
+    @Test
+    public void testMakeTurnPlayerVerticalWin() throws IllegalAccessException {
+        CellContent[][] startingState = new CellContent[][]{{CellContent.X, CellContent.EMPTY, CellContent.O},
+                {CellContent.X, CellContent.EMPTY, CellContent.O},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY}};
+        CellContent[][] expectedState = new CellContent[][]{{CellContent.X, CellContent.EMPTY, CellContent.O},
+                {CellContent.X, CellContent.EMPTY, CellContent.O},
+                {CellContent.X, CellContent.EMPTY, CellContent.EMPTY}};
+        checkStateAfterPlayerTurn(startingState, expectedState, 2, 0);
+    }
+
+    @Test
+    public void testMakeTurnPlayerFirstDiagonalWin() throws IllegalAccessException {
+        CellContent[][] startingState = new CellContent[][]{{CellContent.X, CellContent.EMPTY, CellContent.O},
+                {CellContent.EMPTY, CellContent.X, CellContent.O},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY}};
+        CellContent[][] expectedState = new CellContent[][]{{CellContent.X, CellContent.EMPTY, CellContent.O},
+                {CellContent.EMPTY, CellContent.X, CellContent.O},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.X}};
+        checkStateAfterPlayerTurn(startingState, expectedState, 2, 2);
+    }
+
+    @Test
+    public void testMakeTurnPlayerSecondDiagonalWin() throws IllegalAccessException {
+        CellContent[][] startingState = new CellContent[][]{{CellContent.O, CellContent.EMPTY, CellContent.X},
+                {CellContent.EMPTY, CellContent.X, CellContent.O},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY}};
+        CellContent[][] expectedState = new CellContent[][]{{CellContent.O, CellContent.EMPTY, CellContent.X},
+                {CellContent.EMPTY, CellContent.X, CellContent.O},
+                {CellContent.X, CellContent.EMPTY, CellContent.EMPTY}};
+        checkStateAfterPlayerTurn(startingState, expectedState, 2, 0);
+    }
+
+    private void checkEnemyFirstTurn(CellContent[][] boardState) {
         int diff = 0;
         for (int i = 0; i < boardState.length; i++) {
             for (int j = 0; j < boardState.length; j++) {
-                if (!boardState[i][j].equals(" ") && !(i == 2 && j == 1)) {
-                    assertEquals(Player.O.toString(), boardState[i][j]);
+                if (!boardState[i][j].equals(CellContent.EMPTY) && !(i == 2 && j == 1)) {
+                    assertEquals(CellContent.O, boardState[i][j]);
                     diff++;
                 }
             }
         }
 
         assertEquals(1, diff);
-        assertEquals(Player.X.toString(), boardState[2][1]);
     }
-
-    @Test
-    public void testMakeTurnMediumAIPreventHorizontalLose() throws IllegalAccessException {
+    
+    private void checkStateAfterPlayerTurn(CellContent[][] staringState, CellContent[][] expectedState, int row, int col) throws IllegalAccessException {
         Board board = new AIBoard(3, AILevel.MEDIUM);
-        String[][] boardState = new String[][]{{Player.X.toString(), " ", " "},
-                {Player.O.toString(), " ", " "},
-                {" ", " ", " "}};
-        boardField.set(board, boardState);
-        boardState = board.move(0, 1);
-        assertArrayEquals(new String[][]{{Player.X.toString(), Player.X.toString(), Player.O.toString()},
-                {Player.O.toString(), " ", " "}, {" ", " ", " "}}, boardState);
-    }
-
-    @Test
-    public void testMakeTurnMediumAIPreventVerticalLose() throws IllegalAccessException {
-        Board board = new AIBoard(3, AILevel.MEDIUM);
-        String[][] boardState = new String[][]{{Player.X.toString(), " ", Player.O.toString()},
-                {" ", " ", " "},
-                {" ", " ", " "}};
-        boardField.set(board, boardState);
-        boardState = board.move(1, 0);
-        assertArrayEquals(new String[][]{{Player.X.toString(), " ", Player.O.toString()},
-                {Player.X.toString(), " ", " "}, {Player.O.toString(), " ", " "}}, boardState);
-    }
-
-    @Test
-    public void testMakeTurnMediumAIPreventFirstDiagonalLose() throws IllegalAccessException {
-        Board board = new AIBoard(3, AILevel.MEDIUM);
-        String[][] boardState = new String[][]{{Player.X.toString(), " ", Player.O.toString()},
-                {" ", " ", " "},
-                {" ", " ", " "}};
-        boardField.set(board, boardState);
-        boardState = board.move(1, 1);
-        assertArrayEquals(new String[][]{{Player.X.toString(), " ", Player.O.toString()},
-                {" ", Player.X.toString(), " "}, {" ", " ", Player.O.toString()}}, boardState);
-    }
-
-    @Test
-    public void testMakeTurnMediumAIPreventSecondDiagonalLose() throws IllegalAccessException {
-        Board board = new AIBoard(3, AILevel.MEDIUM);
-        String[][] boardState = new String[][]{{Player.O.toString(), " ", Player.X.toString()},
-                {" ", " ", " "},
-                {" ", " ", " "}};
-        boardField.set(board, boardState);
-        boardState = board.move(1, 1);
-        assertArrayEquals(new String[][]{{Player.O.toString(), " ", Player.X.toString()},
-                {" ", Player.X.toString(), " "}, {Player.O.toString(), " ", " "}}, boardState);
-    }
-
-    @Test
-    public void testMakeTurnMediumAIHorizontalWin() throws IllegalAccessException {
-        Board board = new AIBoard(3, AILevel.MEDIUM);
-        String[][] boardState = new String[][]{{Player.O.toString(), " ", Player.O.toString()},
-                {Player.X.toString(), " ", " "},
-                {Player.X.toString(), " ", " "}};
-        boardField.set(board, boardState);
-        boardState = board.move(1, 1);
-        assertArrayEquals(new String[][]{{Player.O.toString(), Player.O.toString(), Player.O.toString()},
-                {Player.X.toString(), Player.X.toString(), " "}, {Player.X.toString(), " ", " "}}, boardState);
-    }
-
-    @Test
-    public void testMakeTurnMediumAIVerticalWin() throws IllegalAccessException {
-        Board board = new AIBoard(3, AILevel.MEDIUM);
-        String[][] boardState = new String[][]{{Player.O.toString(), Player.X.toString(), Player.X.toString()},
-                {Player.O.toString(), " ", " "},
-                {" ", " ", " "}};
-        boardField.set(board, boardState);
-        boardState = board.move(1, 1);
-        assertArrayEquals(new String[][]{{Player.O.toString(), Player.X.toString(), Player.X.toString()},
-                {Player.O.toString(), Player.X.toString(), " "}, {Player.O.toString(), " ", " "}}, boardState);
-    }
-
-    @Test
-    public void testMakeTurnMediumAIFirstDiagonalWin() throws IllegalAccessException {
-        Board board = new AIBoard(3, AILevel.MEDIUM);
-        String[][] boardState = new String[][]{{Player.O.toString(), Player.X.toString(), Player.X.toString()},
-                {" ", " ", " "},
-                {" ", " ", Player.O.toString()}};
-        boardField.set(board, boardState);
-        boardState = board.move(2, 0);
-        assertArrayEquals(new String[][]{{Player.O.toString(), Player.X.toString(), Player.X.toString()},
-                {" ", Player.O.toString(), " "}, {Player.X.toString(), " ", Player.O.toString()}}, boardState);
-    }
-
-    @Test
-    public void testMakeTurnMediumAISecondDiagonalWin() throws IllegalAccessException {
-        Board board = new AIBoard(3, AILevel.MEDIUM);
-        String[][] boardState = new String[][]{{Player.X.toString(), Player.X.toString(), Player.O.toString()},
-                {" ", " ", " "},
-                {Player.O.toString(), " ", " "}};
-        boardField.set(board, boardState);
-        boardState = board.move(1, 0);
-        assertArrayEquals(new String[][]{{Player.X.toString(), Player.X.toString(), Player.O.toString()},
-                {Player.X.toString(), Player.O.toString(), " "}, {Player.O.toString(), " ", " "}}, boardState);
-    }
-
-    @Test
-    public void testMakeTurnPlayerHorizontalWin() throws IllegalAccessException {
-        Board board = new AIBoard(3, AILevel.MEDIUM);
-        String[][] boardState = new String[][]{{Player.X.toString(), " ", Player.X.toString()},
-                {Player.O.toString(), " ", Player.O.toString()},
-                {" ", " ", " "}};
-        boardField.set(board, boardState);
-        boardState = board.move(0, 1);
-        assertArrayEquals(new String[][]{{Player.X.toString(), Player.X.toString(), Player.X.toString()},
-                {Player.O.toString(), " ", Player.O.toString()}, {" ", " ", " "}}, boardState);
-    }
-
-    @Test
-    public void testMakeTurnPlayerVerticalWin() throws IllegalAccessException {
-        Board board = new AIBoard(3, AILevel.MEDIUM);
-        String[][] boardState = new String[][]{{Player.X.toString(), " ", Player.O.toString()},
-                {Player.X.toString(), " ", Player.O.toString()},
-                {" ", " ", " "}};
-        boardField.set(board, boardState);
-        boardState = board.move(2, 0);
-        assertArrayEquals(new String[][]{{Player.X.toString(), " ", Player.O.toString()},
-                {Player.X.toString(), " ", Player.O.toString()}, {Player.X.toString(), " ", " "}}, boardState);
-    }
-
-    @Test
-    public void testMakeTurnPlayerFirstDiagonalWin() throws IllegalAccessException {
-        Board board = new AIBoard(3, AILevel.MEDIUM);
-        String[][] boardState = new String[][]{{Player.X.toString(), " ", Player.O.toString()},
-                {" ", Player.X.toString(), Player.O.toString()},
-                {" ", " ", " "}};
-        boardField.set(board, boardState);
-        boardState = board.move(2, 2);
-        assertArrayEquals(new String[][]{{Player.X.toString(), " ", Player.O.toString()},
-                {" ", Player.X.toString(), Player.O.toString()}, {" ", " ", Player.X.toString()}}, boardState);
-    }
-
-    @Test
-    public void testMakeTurnPlayerSecondDiagonalWin() throws IllegalAccessException {
-        Board board = new AIBoard(3, AILevel.MEDIUM);
-        String[][] boardState = new String[][]{{Player.O.toString(), " ", Player.X.toString()},
-                {" ", Player.X.toString(), Player.O.toString()},
-                {" ", " ", " "}};
-        boardField.set(board, boardState);
-        boardState = board.move(2, 0);
-        assertArrayEquals(new String[][]{{Player.O.toString(), " ", Player.X.toString()},
-                {" ", Player.X.toString(), Player.O.toString()}, {Player.X.toString(), " ", " "}}, boardState);
+        boardField.set(board, staringState);
+        CellContent[][] actualState = board.move(row, col);
+        assertArrayEquals(expectedState, actualState);
     }
 }

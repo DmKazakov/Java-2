@@ -24,6 +24,17 @@ import javafx.stage.Stage;
  */
 public class TicTacToe extends Application {
     private static final int BOARD_SIZE = 3;
+    private static final String EASY_AI = "Easy";
+    private static final String MEDIUM_AI = "Medium";
+    private static final String SINGLE_PLAYER_LABEL = "SinglePlayer";
+    private static final String MULTI_PLAYER_LABEL = "MultiPlayer";
+    private static final String STATS_LABEL = "Stats";
+    private static final String EXIT_LABEL = "Exit";
+    private static final String RESTART_LABEL = "Restart";
+    private static final String MAIN_MENU_LABEL = "Main menu";
+    private static final String APP_TITLE = "Nevermind";
+    private static final String MAIN_MENU_TITLE = "Welcome";
+
     private Stage primaryStage;
     private Scene mainMenuScene;
     private Scene boardScene;
@@ -43,7 +54,7 @@ public class TicTacToe extends Application {
         initializeBoardScene();
         initializeStatsScene();
         primaryStage.setScene(mainMenuScene);
-        primaryStage.setTitle("Nevermind");
+        primaryStage.setTitle(APP_TITLE);
         primaryStage.show();
         primaryStage.requestFocus();
     }
@@ -52,7 +63,7 @@ public class TicTacToe extends Application {
      * Creates and initializes main menu scene.
      */
     private void initializeMainMenuScene() {
-        Text sceneTitle = new Text("Welcome");
+        Text sceneTitle = new Text(MAIN_MENU_TITLE);
         sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         sceneTitle.setFill(Color.WHITE);
 
@@ -63,18 +74,18 @@ public class TicTacToe extends Application {
         ComboBox<String> AILevelComboBox = new ComboBox<>();
         AILevelComboBox.setFocusTraversable(false);
         AILevelComboBox.setMaxWidth(Double.MAX_VALUE);
-        AILevelComboBox.getItems().addAll("Medium", "Easy");
-        AILevelComboBox.setValue("Medium");
+        AILevelComboBox.getItems().addAll(MEDIUM_AI, EASY_AI);
+        AILevelComboBox.setValue(MEDIUM_AI);
 
-        Button singlePlayerButton = new Button("SinglePlayer");
+        Button singlePlayerButton = new Button(SINGLE_PLAYER_LABEL);
         singlePlayerButton.setFocusTraversable(false);
         singlePlayerButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         singlePlayerButton.setOnAction(value -> {
             switch (AILevelComboBox.getValue()) {
-                case "Medium":
+                case MEDIUM_AI:
                     board = new AIBoard(BOARD_SIZE, AILevel.MEDIUM);
                     break;
-                case "Easy":
+                case EASY_AI:
                     board = new AIBoard(BOARD_SIZE, AILevel.EASY);
                     break;
             }
@@ -87,7 +98,7 @@ public class TicTacToe extends Application {
         HBox.setHgrow(singlePlayerButton, Priority.ALWAYS);
         singlePlayerMenu.getChildren().addAll(singlePlayerButton, AILevelComboBox);
 
-        Button multiPlayerButton = new Button("MultiPlayer");
+        Button multiPlayerButton = new Button(MULTI_PLAYER_LABEL);
         multiPlayerButton.setFocusTraversable(false);
         multiPlayerButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         multiPlayerButton.setOnAction(value -> {
@@ -97,12 +108,12 @@ public class TicTacToe extends Application {
             primaryStage.setScene(boardScene);
         });
 
-        Button statsButton = new Button("Stats");
+        Button statsButton = new Button(STATS_LABEL);
         statsButton.setFocusTraversable(false);
         statsButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         statsButton.setOnAction(value -> primaryStage.setScene(statsScene));
 
-        Button exitButton = new Button("Exit");
+        Button exitButton = new Button(EXIT_LABEL);
         exitButton.setFocusTraversable(false);
         exitButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         exitButton.setOnAction(value -> Platform.exit());
@@ -120,12 +131,12 @@ public class TicTacToe extends Application {
      * Creates and initializes board scene.
      */
     private void initializeBoardScene() {
-        Button mainMenuButton = new Button("Main menu");
+        Button mainMenuButton = new Button(MAIN_MENU_LABEL);
         mainMenuButton.setFocusTraversable(false);
         mainMenuButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         mainMenuButton.setOnAction(value -> primaryStage.setScene(mainMenuScene));
 
-        Button restartButton = new Button("Restart");
+        Button restartButton = new Button(RESTART_LABEL);
         restartButton.setFocusTraversable(false);
         restartButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         restartButton.setOnAction(value -> {
@@ -201,14 +212,14 @@ public class TicTacToe extends Application {
         statsPane.setPadding(new Insets(10, 25, 10, 25));
         statsPane.setSpacing(10);
 
-        Text sceneTitle = new Text("Stats");
+        Text sceneTitle = new Text(STATS_LABEL);
         sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         sceneTitle.setFill(Color.WHITE);
 
         ListView<String> listView = new ListView<>(stats);
         listView.setFocusTraversable(false);
 
-        Button mainMenuButton = new Button("Main menu");
+        Button mainMenuButton = new Button(MAIN_MENU_LABEL);
         mainMenuButton.setFocusTraversable(false);
         mainMenuButton.setOnAction(value -> primaryStage.setScene(mainMenuScene));
 
@@ -259,11 +270,11 @@ public class TicTacToe extends Application {
      *
      * @param boardState specified state of the board
      */
-    private void updateBoardScene(String[][] boardState) {
+    private void updateBoardScene(CellContent[][] boardState) {
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells.length; j++) {
-                cells[i][j].setDisable(!boardState[i][j].equals(" "));
-                cells[i][j].setText(boardState[i][j]);
+                cells[i][j].setDisable(!boardState[i][j].equals(CellContent.EMPTY));
+                cells[i][j].setText(boardState[i][j].toString());
             }
         }
     }

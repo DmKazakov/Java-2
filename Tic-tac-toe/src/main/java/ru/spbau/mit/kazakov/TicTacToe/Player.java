@@ -14,6 +14,13 @@ public enum Player {
     }
 
     /**
+     * Returns content of cell corresponding to current turn's owner.
+     */
+    public CellContent toCellContent() {
+        return this == X ? CellContent.X : CellContent.O;
+    }
+
+    /**
      * Returns state of game corresponding to victory of current turn's owner.
      */
     public State getWinState() {

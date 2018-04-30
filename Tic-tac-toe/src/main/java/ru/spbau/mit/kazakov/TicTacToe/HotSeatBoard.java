@@ -18,8 +18,8 @@ public class HotSeatBoard extends AbstractBoard {
      */
     @NotNull
     @Override
-    public String[][] move(int row, int col) {
-        board[row][col] = player.toString();
+    public CellContent[][] move(int row, int col) {
+        board[row][col] = player.toCellContent();
         updateState(row, col);
         player = player.next();
         return board;

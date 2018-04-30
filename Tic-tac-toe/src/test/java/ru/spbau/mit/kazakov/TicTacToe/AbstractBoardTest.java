@@ -94,8 +94,10 @@ public class AbstractBoardTest {
         board.move(2, 2);
         board.move(2, 0);
         board.reset();
-        assertArrayEquals(new String[][]{{Player.X.toString(), " ", " "},
-                {" ", " ", " "}, {" ", " ", " "}}, board.move(0, 0));
+        assertArrayEquals(new CellContent[][]{{CellContent.X, CellContent.EMPTY, CellContent.EMPTY},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY},
+                {CellContent.EMPTY, CellContent.EMPTY, CellContent.EMPTY}},
+                board.move(0, 0));
         assertEquals(State.RUNNING, board.getState());
     }
 }

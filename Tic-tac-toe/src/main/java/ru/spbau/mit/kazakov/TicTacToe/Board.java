@@ -11,7 +11,7 @@ public interface Board {
      * @return new state of board
      */
     @NotNull
-    String[][] move(int row, int col);
+    CellContent[][] move(int row, int col);
 
     /**
      * Returns current state of the game.
@@ -22,5 +22,5 @@ public interface Board {
     /**
      * Sets board to starting state.
      */
-    String[][] reset();
+    CellContent[][] reset();
 }

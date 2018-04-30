@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
  * An abstract class with base functionality of game logic.
  */
 public abstract class AbstractBoard implements Board {
-    protected String[][] board;
+    protected CellContent[][] board;
     protected State state;
     protected Player player;
     private int size;
@@ -42,10 +42,10 @@ public abstract class AbstractBoard implements Board {
         boolean firstDiagonalWin = true;
         boolean secondDiagonalWin = true;
         for (int i = 0; i < size; i++) {
-            verticalWin &= board[i][col].equals(player.toString());
-            horizontalWin &= board[row][i].equals(player.toString());
-            firstDiagonalWin &= board[i][i].equals(player.toString());
-            secondDiagonalWin &= board[i][size - 1 - i].equals(player.toString());
+            verticalWin &= board[i][col].equals(player.toCellContent());
+            horizontalWin &= board[row][i].equals(player.toCellContent());
+            firstDiagonalWin &= board[i][i].equals(player.toCellContent());
+            secondDiagonalWin &= board[i][size - 1 - i].equals(player.toCellContent());
         }
         if (horizontalWin || verticalWin || firstDiagonalWin || secondDiagonalWin) {
             state = player.getWinState();
@@ -58,11 +58,11 @@ public abstract class AbstractBoard implements Board {
      * @see Board#reset()
      */
     @Override
-    public String[][] reset() {
-        board = new String[size][size];
-        for (String[] row : board) {
+    public CellContent[][] reset() {
+        board = new CellContent[size][size];
+        for (CellContent[] row : board) {
             for (int i = 0; i < size; i++) {
-                row[i] = " ";
+                row[i] = CellContent.EMPTY;
             }
         }
         state = State.RUNNING;
