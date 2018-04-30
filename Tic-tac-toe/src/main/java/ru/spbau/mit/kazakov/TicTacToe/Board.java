@@ -22,5 +22,6 @@ public interface Board {
     /**
      * Sets board to starting state.
      */
+    @NotNull
     CellContent[][] reset();
 }
