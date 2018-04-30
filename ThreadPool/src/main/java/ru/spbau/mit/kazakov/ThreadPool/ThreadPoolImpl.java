@@ -22,34 +22,10 @@ public class ThreadPoolImpl {
      */
     public ThreadPoolImpl(int numberOfThreads) {
         this.threads = new Thread[numberOfThreads];
-        Runnable threadCycle = () -> {
-            while (!Thread.currentThread().isInterrupted()) {
-                Task task;
-                synchronized (tasksQueue) {
-                    while (this.tasksQueue.isEmpty()) {
-                        try {
-                            tasksQueue.wait();
-                        } catch (InterruptedException exception) {
-                            return;
-                        }
-                    }
-                    task = tasksQueue.remove();
-                }
-
-                //noinspection SynchronizationOnLocalVariableOrMethodParameter
-                synchronized (task) {
-                    task.compute();
-                    task.notify();
-                }
-            }
-
-        };
-
         for (int i = 0; i < numberOfThreads; ++i) {
-            this.threads[i] = new Thread(threadCycle);
+            this.threads[i] = new Thread(new ThreadCycle());
             this.threads[i].start();
         }
-
     }
 
     /**
@@ -87,6 +63,34 @@ public class ThreadPoolImpl {
     }
 
     /**
+     * An implementation of {@link Runnable} for creating threads.
+     */
+    private class ThreadCycle implements Runnable {
+        @Override
+        public void run() {
+            while (!Thread.currentThread().isInterrupted()) {
+                Task<?> task;
+                synchronized (tasksQueue) {
+                    while (tasksQueue.isEmpty()) {
+                        try {
+                            tasksQueue.wait();
+                        } catch (InterruptedException exception) {
+                            return;
+                        }
+                    }
+                    task = tasksQueue.remove();
+                }
+
+                //noinspection SynchronizationOnLocalVariableOrMethodParameter
+                synchronized (task) {
+                    task.compute();
+                    task.notify();
+                }
+            }
+        }
+    }
+
+    /**
      * An implementation of LightFuture for using in {@link ThreadPoolImpl}.
      *
      * @param <T> type of computation result.
@@ -108,7 +112,7 @@ public class ThreadPoolImpl {
         /**
          * Makes computation, saves result and adds deferred task to queue.
          */
-        public void compute() {
+        private void compute() {
             try {
                 result = new Holder<>(computation.get());
             } catch (RuntimeException exception) {
@@ -118,7 +122,7 @@ public class ThreadPoolImpl {
             isReady = true;
             synchronized (tasksQueue) {
                 tasksQueue.addAll(this.deferredTasks);
-                tasksQueue.notify();
+                tasksQueue.notifyAll();
             }
         }
 

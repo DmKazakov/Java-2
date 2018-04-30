@@ -33,9 +33,7 @@ public class ThreadPoolImplTest {
         Assert.assertEquals(":(", lightFuture.get());
     }
 
-    @Test(
-            expected = LightExecutionException.class
-    )
+    @Test(expected = LightExecutionException.class)
     public void testComputeThrowsException() throws LightExecutionException, InterruptedException {
         //noinspection NumericOverflow
         Supplier<Integer> task = () -> 5 / 0;
