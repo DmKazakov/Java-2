@@ -245,7 +245,7 @@ public class ClientGUI extends Application {
      */
     @NotNull
     private Button getButtonByFileDescription(@NotNull FileDescription fileDescription) {
-        Path filePath = Paths.get(fileDescription.getName());
+        Path filePath = Paths.get(fileDescription.getPath());
         Button button = new Button(filePath.getFileName().toString());
         button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 

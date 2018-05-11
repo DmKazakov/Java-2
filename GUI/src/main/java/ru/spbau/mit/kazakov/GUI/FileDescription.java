@@ -8,22 +8,22 @@ import java.io.File;
  * Class for representing information about files given by server.
  */
 public class FileDescription {
-    private String name;
+    private String path;
     private boolean isDirectory;
 
-    public FileDescription(@NotNull String name, boolean isDirectory) {
-        this.name = name;
+    public FileDescription(@NotNull String path, boolean isDirectory) {
+        this.path = path;
         this.isDirectory = isDirectory;
     }
 
     public FileDescription(@NotNull File file) {
-        name = file.getAbsolutePath();
+        path = file.getAbsolutePath();
         isDirectory = file.isDirectory();
     }
 
     @NotNull
-    public String getName() {
-        return name;
+    public String getPath() {
+        return path;
     }
 
     public boolean isDirectory() {
@@ -34,7 +34,7 @@ public class FileDescription {
     public boolean equals(Object o) {
         if (o instanceof FileDescription) {
             FileDescription f = (FileDescription) o;
-            return name.equals(f.name) && isDirectory == f.isDirectory;
+            return path.equals(f.path) && isDirectory == f.isDirectory;
         } else {
             return false;
         }
@@ -42,6 +42,6 @@ public class FileDescription {
 
     @Override
     public String toString() {
-        return name + " " + isDirectory;
+        return path + " " + isDirectory;
     }
 }

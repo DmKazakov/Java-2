@@ -77,7 +77,7 @@ public class Server {
                             List<FileDescription> directoryContent = listTask.get();
                             out.writeInt(directoryContent.size());
                             for (FileDescription file : directoryContent) {
-                                out.writeUTF(file.getName());
+                                out.writeUTF(file.getPath());
                                 out.writeBoolean(file.isDirectory());
                             }
                             out.flush();

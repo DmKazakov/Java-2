@@ -18,10 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 
 public class ServerTest {
@@ -30,7 +28,6 @@ public class ServerTest {
 
     @Rule
     public final TemporaryFolder testingFolder = new TemporaryFolder();
-
 
     @Before
     public void initialize() {
@@ -48,9 +45,10 @@ public class ServerTest {
         Files.createFile(Paths.get(testingPath.toString(), "another_file"));
         Files.createDirectory(Paths.get(testingPath.toString(), "dir_name"));
 
-        List<FileDescription> expected = Arrays.asList(new FileDescription("file_name", false),
-                new FileDescription("another_file", false),
-                new FileDescription("dir_name", true));
+        List<FileDescription> expected = Arrays.asList(
+                new FileDescription(testingPath.toString() + File.separator + "file_name", false),
+                new FileDescription(testingPath.toString() + File.separator + "another_file", false),
+                new FileDescription(testingPath.toString() + File.separator + "dir_name", true));
 
         testList(testingPath.toString(), expected);
     }
