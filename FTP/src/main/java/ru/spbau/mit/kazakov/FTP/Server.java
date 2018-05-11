@@ -40,7 +40,8 @@ public class Server {
      */
     public void startServer() {
         while (true) {
-            try (Socket clientSocket = serverSocket.accept()) {
+            try {
+                Socket clientSocket = serverSocket.accept();
                 new Thread(new ClientHandler(clientSocket)).start();
             } catch (IOException exception) {
                 //nothing to do
