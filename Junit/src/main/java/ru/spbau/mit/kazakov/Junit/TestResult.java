@@ -10,9 +10,9 @@ import java.lang.reflect.Method;
  */
 @Value
 class TestResult {
-    private String aClass;
-    private String method;
-    private String result;
+    private final String aClass;
+    private final String method;
+    private final String result;
     private long time;
 
     public TestResult(@NotNull Method test, @NotNull String result, long time) {
